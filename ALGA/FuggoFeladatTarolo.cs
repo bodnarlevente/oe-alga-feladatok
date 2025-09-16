@@ -11,7 +11,7 @@ namespace OE.ALGA
         public FuggoFeladatTarolo(int meret) : base(meret)
         {
         }
-        public void FuggosegSzerintVegrehajt()
+        public override void MindentVegrehajt()
         {
             for (int i = 0; i < n; i++)
             {

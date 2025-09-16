@@ -24,7 +24,7 @@ namespace OE.ALGA
             }
             else
             {
-                throw new IndexOutOfRangeException("A tároló megtelt.");
+                throw new TaroloMegteltException("A tároló megtelt.");
             }
         }
         public void MindentVegrehajt()
