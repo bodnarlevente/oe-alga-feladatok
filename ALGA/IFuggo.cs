@@ -8,6 +8,6 @@ namespace OE.ALGA
 {
     public interface IFuggo
     {
-        bool FuggosegTeljesul { get; private set; }
+        bool FuggosegTeljesul { get;}
     }
 }

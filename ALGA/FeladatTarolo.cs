@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace OE.ALGA
 {
-    public class FeladatTarolo<T> where T : IVegrehajto
+    public abstract class FeladatTarolo<T> where T : IVegrehajto
     {
-        new T[] tarolo;
-        new int n;
+        public T[] tarolo;
+        public int n;
         public FeladatTarolo(int meret)
         {
             tarolo = new T[meret];
@@ -27,7 +27,7 @@ namespace OE.ALGA
                 throw new TaroloMegteltException("A tároló megtelt.");
             }
         }
-        public void MindentVegrehajt()
+        public virtual void MindentVegrehajt()
         {
             for (int i = 0; i < n; i++)
             {

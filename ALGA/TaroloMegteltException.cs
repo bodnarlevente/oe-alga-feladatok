@@ -17,9 +17,7 @@ namespace OE.ALGA
         public TaroloMegteltException(string message, Exception inner) : base(message, inner)
         {
         }
-        protected TaroloMegteltException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+       
 
     }
 }
