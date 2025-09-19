@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OE.ALGA
 {
-    public abstract class FeladatTarolo<T> where T : IVegrehajto
+    public abstract class FeladatTarolo<T> : IEnumerable<T> where T : IVegrehajto 
     {
         public T[] tarolo;
         public int n;
@@ -33,6 +33,14 @@ namespace OE.ALGA
             {
                 tarolo[i].Vegrehajtas();
             }
+        }
+        public IEnumerator<T> GetEnumerator()
+        {
+           return new FeladatTaroloBejaro<T>(tarolo, n);
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
