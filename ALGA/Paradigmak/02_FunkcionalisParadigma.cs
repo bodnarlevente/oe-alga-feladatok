@@ -6,6 +6,7 @@ namespace OE.ALGA.Paradigmak
 {
     public class FeltetelesFeladatTarolo<T> : FeladatTarolo<T> where T : IVegrehajthato
     {
+        public Func<T, bool> BejaroFeltetel { get; set; }
         public FeltetelesFeladatTarolo(int meret) : base(meret)
         {
         }
