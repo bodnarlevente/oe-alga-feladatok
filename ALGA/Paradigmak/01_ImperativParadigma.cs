@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace OE.ALGA.Paradigmak
 {
-    public class FeladatTarolo<T> : IEnumerable<T> where T : IVegrehajto
+    public class FeladatTarolo<T> : IEnumerable<T> where T : IVegrehajthato
     {
         public T[] tarolo;
         public int n;
@@ -45,7 +45,7 @@ namespace OE.ALGA.Paradigmak
     {
         bool FuggosegTeljesul { get; }
     }
-    public interface IVegrehajto
+    public interface IVegrehajthato
     {
         void Vegrehajtas();
     }
@@ -63,7 +63,7 @@ namespace OE.ALGA.Paradigmak
 
 
     }
-    public class FuggoFeladatTarolo<T> : FeladatTarolo<T> where T : IVegrehajto, IFuggo
+    public class FuggoFeladatTarolo<T> : FeladatTarolo<T> where T : IVegrehajthato, IFuggo
     {
         public FuggoFeladatTarolo(int meret) : base(meret)
         {
