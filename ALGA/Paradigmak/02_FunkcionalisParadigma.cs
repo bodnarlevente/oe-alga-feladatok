@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace OE.ALGA.Paradigmak
 {
@@ -26,7 +27,7 @@ namespace OE.ALGA.Paradigmak
                 
             }
         }
-        public IEnumerator<T> GetEnumerator()
+        public new IEnumerator<T> GetEnumerator()
         {
             
             if (BejaroFeltetel is null)
@@ -69,14 +70,12 @@ namespace OE.ALGA.Paradigmak
                 {
                     throw new InvalidOperationException();
                 }
-                if (feltetel(tarolo[aktualisIndex]) is true)
-                {
-                    return tarolo[aktualisIndex];
-                }
-                else
-                {
-                    throw new InvalidOperationException("A feltétel nem teljesül az aktuális elemre.");
-                }
+                
+                
+                return tarolo[aktualisIndex];
+                
+                
+
             }
         }
 
@@ -89,12 +88,15 @@ namespace OE.ALGA.Paradigmak
 
         public bool MoveNext()
         {
-            if (aktualisIndex < n - 1)
+            while (++aktualisIndex < n)
             {
-                aktualisIndex++;
-                return true;
+                if (feltetel == null || feltetel(tarolo[aktualisIndex]))
+                {
+                    return true; 
+                }
             }
             return false;
+
         }
 
         public void Reset()

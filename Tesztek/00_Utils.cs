@@ -22,7 +22,7 @@ namespace Guardian
 namespace OE.ALGA.Tesztek
 {
     #region Paradigmak
-    class TesztFeladat : IVegrehajto
+    class TesztFeladat : IVegrehajthato
     {
         public string Azonosito { get; set; }
         public bool Vegrehajtott { get; set; }
