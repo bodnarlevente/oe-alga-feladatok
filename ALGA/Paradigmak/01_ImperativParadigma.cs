@@ -101,6 +101,7 @@ namespace OE.ALGA.Paradigmak
                 {
                     throw new InvalidOperationException();
                 }
+
                 return tarolo[pozicio];
             }
         }
