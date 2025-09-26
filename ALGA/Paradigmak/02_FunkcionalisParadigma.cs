@@ -4,11 +4,16 @@ using System.Collections.Generic;
 
 namespace OE.ALGA.Paradigmak
 {
-    public class FeltetelesFeladatTarolo<T> : FeladatTarolo<T> where T : IVegrehajthato
+    public class FeltetelesFeladatTarolo<T> : FeladatTarolo<T>, IEnumerable<T> where T : IVegrehajthato
     {
-        public Func<T, bool> BejaroFeltetel { get; set; }
+        public Func<T, bool>? BejaroFeltetel { get; set; }
         public FeltetelesFeladatTarolo(int meret) : base(meret)
         {
+            
+        }
+        public FeltetelesFeladatTarolo(int meret, Func<T, bool> bejaroFeltetel) : base(meret)
+        {
+            this.BejaroFeltetel = bejaroFeltetel;
         }
         public void FeltetelesVegrehajtas (Func<T, bool> feltetel)
         {
@@ -20,6 +25,24 @@ namespace OE.ALGA.Paradigmak
                 }
                 
             }
+        }
+        public IEnumerator<T> GetEnumerator()
+        {
+            
+            if (BejaroFeltetel is null)
+            {
+                return new FeltetelesFeladatTaroloBejaro<T>(tarolo, n, BejaroFeltetel=>true);
+            }
+            else 
+            {
+                return new FeltetelesFeladatTaroloBejaro<T>(tarolo, n, BejaroFeltetel);
+            }
+            
+
+        }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
     }
