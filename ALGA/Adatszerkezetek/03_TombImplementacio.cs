@@ -19,7 +19,11 @@ namespace OE.ALGA.Adatszerkezetek
 
         public T Felso()
         {
-            throw new NotImplementedException();
+            if (Ures)
+            {
+                throw new NincsElemKivetel();
+            }
+            return E[E.Length - 1];
         }
 
         public void Verembe(T ertek)
@@ -36,7 +40,13 @@ namespace OE.ALGA.Adatszerkezetek
 
         public T Verembol()
         {
-            throw new NotImplementedException();
+            if (Ures)
+            {
+                throw new NincsElemKivetel();
+            }
+            T elem = E[E.Length - 1];
+            E = E.Take(E.Length - 1).ToArray();
+            return elem;
         }
         public TömbVerem(int n)
         {
