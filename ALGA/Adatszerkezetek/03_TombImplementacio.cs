@@ -78,7 +78,7 @@ namespace OE.ALGA.Adatszerkezetek
             this.E = new T[meret];
             this.e = 0;
             this.u = 0;
-            
+            thisl.nódad
         }
 
         public bool Ures
