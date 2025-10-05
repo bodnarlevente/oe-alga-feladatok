@@ -5,13 +5,11 @@ using System.Linq;
 
 namespace OE.ALGA.Adatszerkezetek
 {
-    public class TömbVerem<T> : Verem<T>
+    public class TombVerem<T> : Verem<T>
     {
         private T[] E; 
-        private int n;
-
-
-
+        int n = 0;
+        private int max_meret;
         public bool Ures
         {
             get { return n == 0; }
@@ -23,19 +21,17 @@ namespace OE.ALGA.Adatszerkezetek
             {
                 throw new NincsElemKivetel();
             }
-            return E[E.Length - 1];
+            return E[n - 1];
         }
 
         public void Verembe(T ertek)
         {
-            if (E.Length >= n)
+            if (E.Length >= max_meret)
             {
-                 
                 throw new NincsHelyKivetel();
-            }
-
-            
-            E.Append(ertek);
+            }            
+            E[n] = ertek;
+            n++;
         }
 
         public T Verembol()
@@ -44,19 +40,83 @@ namespace OE.ALGA.Adatszerkezetek
             {
                 throw new NincsElemKivetel();
             }
-            T elem = E[E.Length - 1];
-            E = E.Take(E.Length - 1).ToArray();
+            T elem = E[n - 1];
+            E = E.Take(n - 1).ToArray();
+            n--;
             return elem;
         }
-        public TömbVerem(int n)
+        public TombVerem(int meret)
+        {
+            if (meret <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(meret), "A verem mérete pozitív egész szám kell legyen.");
+            }
+            
+            this.E = new T[meret];
+            this.max_meret = meret;
+        }
+        public void Felszabadit()
+        {
+            E = new T[n];
+        }
+    }
+    public class TombSor<T> : Sor<T>
+    {
+        private T[] E;
+        private int n = 0;
+        private int max_meret;
+        private int e;
+        private int u;
+        
+        public TombSor(int meret)
         {
             if (n <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(n), "A verem mérete pozitív egész szám kell legyen.");
+                throw new ArgumentOutOfRangeException(nameof(meret), "A sor mérete pozitív egész szám kell legyen.");
             }
+
+            this.E = new T[meret];
+            this.e = 0;
+            this.u = 0;
             
-            this.E = new T[n];
-            this.n = n;
+        }
+
+        public bool Ures
+        {
+            get { return n == 0; }
+        }
+
+        public T Elso()
+        {
+            return E[e];    
+        }
+
+        public void Sorba(T ertek)
+        {
+            if (n >= max_meret)
+            {
+                throw new NincsHelyKivetel();
+            }
+            E[n] = ertek;
+            n++;
+        }
+
+        public T Sorbol()
+        {
+            if (Ures)
+            {
+                throw new NincsElemKivetel();
+            }
+            T ertek = E[e];   
+            n--;
+            e++;
+            return ertek;
+        }
+        public void Felszabadit()
+        {
+            E = new T[n];
+            e = 0;
+            u = -1;
         }
     }
 }
