@@ -36,16 +36,115 @@ namespace OE.ALGA.Adatszerkezetek
         }
         public bool Eleme(T ertek)
         {
-            throw new NotImplementedException();
+            return ReszfaEleme(gyoker, ertek);
         }
         public void Torol(T ertek)
         {
-            throw new NotImplementedException();
+            var ujGyoker = ReszfabolTorol(gyoker, ertek);
+
+            
+            gyoker = ujGyoker;
+        }
+        protected static FaElem<T>? ReszfabolTorol(FaElem<T>? p, T ertek)
+        {
+            if (p == null)
+            {
+                
+                throw new NincsElemKivetel();
+            }
+
+            int osszehasonlitas = ertek.CompareTo(p.tart);
+
+            if (osszehasonlitas < 0)
+            {
+                p.bal = ReszfabolTorol(p.bal, ertek);
+            }
+            else if (osszehasonlitas > 0)
+            {
+                p.jobb = ReszfabolTorol(p.jobb, ertek);
+            }
+            else 
+            {
+                
+                if (p.bal == null)
+                {
+                    return p.jobb; 
+                }
+                else if (p.jobb == null)
+                {
+                    return p.bal; 
+                }
+
+                
+                p = KetGyerekesTorles(p);
+            }
+
+            return p;
+        }
+        protected static FaElem<T> KetGyerekesTorles(FaElem<T> torlendoElem)
+        {
+            
+            FaElem<T> utodParent = torlendoElem;
+            FaElem<T> utod = torlendoElem.jobb!;
+
+            while (utod.bal != null)
+            {
+                utodParent = utod;
+                utod = utod.bal;
+            }
+
+            
+            torlendoElem.tart = utod.tart;
+
+            
+            
+            if (utodParent == torlendoElem)
+            {
+                torlendoElem.jobb = utod.jobb;
+            }
+            else 
+            {
+                utodParent.bal = utod.jobb;
+            }
+
+            return torlendoElem;
         }
         public void Bejar(Action<T> muvelet)
         {
-            throw new NotImplementedException();
+            ReszfaBejarasPreOrder(gyoker, muvelet);
         }
+        protected static void ReszfaBejarasPreOrder(FaElem<T>? p, Action<T> muvelet)
+        {
+            if (p != null)
+            {
+                muvelet(p.tart);
+                ReszfaBejarasPreOrder(p.bal, muvelet);
+                ReszfaBejarasPreOrder(p.jobb, muvelet);
+            }
+        }
+        public void BejarInOrder(Action<T> muvelet)
+        {
+            ReszfaBejarasInOrder(gyoker, muvelet);
+        }
+        protected static void ReszfaBejarasInOrder(FaElem<T>? p, Action<T> muvelet)
+        {
+            if (p != null)
+            {
+                ReszfaBejarasInOrder(p.bal, muvelet);
+                muvelet(p.tart);
+                ReszfaBejarasInOrder(p.jobb, muvelet);
+            }
+        }
+        protected static void ReszfaBejarasPostOrder(FaElem<T>? p, Action<T> muvelet)
+        {
+            if (p != null)
+            {
+                ReszfaBejarasPostOrder(p.bal, muvelet);
+                ReszfaBejarasPostOrder(p.jobb, muvelet);
+                muvelet(p.tart);
+            }
+        }
+
         FaElem<T>? ReszfabaBeszur(FaElem<T>? p, T ertek)
         {
             if (p == null)
@@ -62,6 +161,30 @@ namespace OE.ALGA.Adatszerkezetek
             }
             return p;
         }
-        
+        bool ReszfaEleme(FaElem<T>? p, T ertek)
+        {
+            if (p == null)
+            {
+                return false; 
+            }
+
+            int osszehasonlitas = ertek.CompareTo(p.tart);
+
+            if (osszehasonlitas == 0)
+            {
+                return true; 
+            }
+            else if (osszehasonlitas < 0)
+            {
+                return ReszfaEleme(p.bal, ertek); 
+            }
+            else
+            {
+                return ReszfaEleme(p.jobb, ertek); 
+            }
+        }
+
+
+
     }
  }

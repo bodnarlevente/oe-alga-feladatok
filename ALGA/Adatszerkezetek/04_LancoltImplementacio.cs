@@ -17,10 +17,7 @@ namespace OE.ALGA.Adatszerkezetek
         }
     }
 
-    public class NincsElemKivetel : Exception
-    {
-        public NincsElemKivetel() : base("Az adatszerkezet ures, nincs mit kivenni.") { }
-    }
+    
 
     public class HibasIndexKivetel : Exception
     {
