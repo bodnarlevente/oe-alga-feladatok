@@ -145,7 +145,7 @@ namespace OE.ALGA.Adatszerkezetek
             }
         }
 
-        FaElem<T>? ReszfabaBeszur(FaElem<T>? p, T ertek)
+        static FaElem<T>? ReszfabaBeszur(FaElem<T>? p, T ertek)
         {
             if (p == null)
             {
@@ -161,7 +161,7 @@ namespace OE.ALGA.Adatszerkezetek
             }
             return p;
         }
-        bool ReszfaEleme(FaElem<T>? p, T ertek)
+        static bool ReszfaEleme(FaElem<T>? p, T ertek)
         {
             if (p == null)
             {
