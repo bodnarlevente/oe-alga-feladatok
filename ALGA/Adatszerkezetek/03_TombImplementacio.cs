@@ -105,7 +105,7 @@ namespace OE.ALGA.Adatszerkezetek
                 throw new NincsHelyKivetel();
             }
             n++;
-            if (u == E.Length)
+            if (u == E.Length-1)
             {
                 u= 0;
             }
