@@ -16,14 +16,6 @@ namespace OE.ALGA.Adatszerkezetek
             this.kov = kov;
         }
     }
-
-    
-
-    public class HibasIndexKivetel : Exception
-    {
-        public HibasIndexKivetel() : base("A megadott index a tartomanyon kivul esik.") { }
-    }
-
    
 
     public class LancoltVerem<T> : Verem<T>
@@ -125,7 +117,9 @@ namespace OE.ALGA.Adatszerkezetek
             return fej!.tart;
         }
     }
-
+    //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+    //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+    //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
     public class LancoltLista<T> : Lista<T>, IEnumerable<T>
     {
         private LancElem<T>? fej;
@@ -141,7 +135,18 @@ namespace OE.ALGA.Adatszerkezetek
         
         public void Torol(T elem)
         {
-            Torol(0);
+            for (int i = 0; i < elemszam; )
+            {
+                if (Kiolvas(i)!.Equals(elem))
+                {
+                    Torles(i);
+                }
+                else
+                {
+                    i++; 
+                        
+                }
+            }
         }
 
         public void Felszabadit()
@@ -152,7 +157,7 @@ namespace OE.ALGA.Adatszerkezetek
 
         private LancElem<T> ElemLekerdez(int index)
         {
-            if (index < 0 || index >= elemszam)
+            if (index < 0 || index >= elemszam )
             {
                 throw new HibasIndexKivetel();
             }
@@ -194,12 +199,13 @@ namespace OE.ALGA.Adatszerkezetek
             else
             {
                 LancElem<T> elozo = ElemLekerdez(index - 1);
+                
                 elozo.kov = new LancElem<T>(ertek, elozo.kov);
             }
             elemszam++;
         }
 
-        public void Torol(int index)
+        public void Torles(int index)
         {
             if (index < 0 || index >= elemszam)
             {
@@ -233,7 +239,7 @@ namespace OE.ALGA.Adatszerkezetek
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new LancoltListaBejaro<T>(fej);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -253,7 +259,7 @@ namespace OE.ALGA.Adatszerkezetek
             Alaphelyzet();
         }
 
-        public T Aktualis
+        public T Current
         {
             get
             {
@@ -265,8 +271,6 @@ namespace OE.ALGA.Adatszerkezetek
             }
         }
 
-        public T Current => throw new NotImplementedException();
-
         object IEnumerator.Current => throw new NotImplementedException();
 
         public void Alaphelyzet()
@@ -276,7 +280,7 @@ namespace OE.ALGA.Adatszerkezetek
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            // Nincs eroforras, amit fel kellene szabaditani
         }
 
         public bool Kovetkezo()
@@ -291,12 +295,17 @@ namespace OE.ALGA.Adatszerkezetek
 
         public bool MoveNext()
         {
-            throw new NotImplementedException();
+            if (aktualisElem?.kov != null)
+            {
+                aktualisElem = aktualisElem.kov;
+                return true;
+            }
+            return false;
         }
 
         public void Reset()
         {
-            throw new NotImplementedException();
+            aktualisElem = new LancElem<T>(default(T)!, fej);
         }
     }
 

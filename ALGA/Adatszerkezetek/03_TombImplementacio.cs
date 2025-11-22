@@ -119,14 +119,14 @@ namespace OE.ALGA.Adatszerkezetek
         private T[] E;
         private int n;
 
-        public TombLista(int meret)
+        public TombLista(int Elemszam)
         {
-            if (meret <= 0)
+            if (Elemszam <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(meret), "A lista mérete pozitív egész szám kell legyen.");
+                throw new ArgumentOutOfRangeException(nameof(Elemszam), "A lista mérete pozitív egész szám kell legyen.");
             }
 
-            this.E = new T[meret];
+            this.E = new T[Elemszam];
             this.n = 0;
         }
 
@@ -213,32 +213,83 @@ namespace OE.ALGA.Adatszerkezetek
 
         public T Kiolvas(int index)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index >= n)
+            {
+                throw new HibasIndexKivetel();
+            }
+            return E[index];
         }
 
         public void Modosit(int index, T ertek)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index >= n)
+            {
+                throw new HibasIndexKivetel();
+            }
+            E[index] = ertek;
         }
 
         public void Hozzafuz(T ertek)
         {
-            throw new NotImplementedException();
+            if (n >= E.Length)
+            {
+                throw new NincsHelyKivetel();
+            }
+            E[n] = ertek;
+            n++;
         }
 
         public void Beszur(int index, T ertek)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > n)
+            {
+                throw new HibasIndexKivetel();
+            }
+            if (n >= E.Length)
+            {
+                throw new NincsHelyKivetel();
+            }
+            for (int i = n; i > index; i--)
+            {
+                E[i] = E[i - 1];
+            }
+            E[index] = ertek;
+            n++;
         }
 
         public void Torol(T ertek)
         {
-            throw new NotImplementedException();
+            if (n >= E.Length)
+            {
+                throw new NincsHelyKivetel();
+            }
+            int i = 0;
+            while (i < n)
+            {
+                if (E[i].Equals(ertek))
+                {
+                    for (int j = i; j < n - 1; j++)
+                    {
+                        E[j] = E[j + 1];
+                    }
+                    n--;
+                }
+                else
+                {
+                    i++;
+                }
+            }
+
         }
 
         public void Bejar(Action<T> muvelet)
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < n; i++)
+            {
+                muvelet(E[i]);
+            }
+
+
         }
     }
 }
