@@ -41,13 +41,18 @@ namespace OE.ALGA.Adatszerkezetek
                 throw new NincsElemKivetel();
             }
             T elem = E[n - 1];
-            E = E.Take(n - 1).ToArray();
+            T[] ideiglenes = new T[E.Length];
+            for (int i = 0; i < n - 1; i++)
+            {
+                ideiglenes[i] = E[i];
+            }
+            E = ideiglenes;
             n--;
             return elem;
         }
         public TombVerem(int meret)
         {
-            if (meret <= 0)
+            if (meret < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(meret), "A verem mérete pozitív egész szám kell legyen.");
             }
@@ -57,6 +62,8 @@ namespace OE.ALGA.Adatszerkezetek
         }
         
     }
+    //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+    //wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
     public class TombSor<T> : Sor<T>
     {
         private T[] E;
@@ -66,7 +73,7 @@ namespace OE.ALGA.Adatszerkezetek
 
         public TombSor(int meret)
         {
-            if (n <= 0)
+            if (n < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(meret), "A sor mérete pozitív egész szám kell legyen.");
             }
@@ -98,7 +105,7 @@ namespace OE.ALGA.Adatszerkezetek
                 throw new NincsHelyKivetel();
             }
             n++;
-            u = (u % E.Length) + 1;
+            u = (u % E.Length) ;
             E[u] = ertek;
         }
 
@@ -114,20 +121,21 @@ namespace OE.ALGA.Adatszerkezetek
             return E[e];
         }
     }
-    public class TombLista<T> : Lista<T>
+    public class TombLista<T> : Lista<T>, IEnumerable<T>
     {
         private T[] E;
         private int n;
-
-        public TombLista(int Elemszam)
+        public int Elemszam => n;
+        public TombLista()
         {
-            if (Elemszam <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(Elemszam), "A lista mérete pozitív egész szám kell legyen.");
-            }
-
-            this.E = new T[Elemszam];
-            this.n = 0;
+            
+            int goji = 16;
+            
+            
+             this.E = new T[goji];
+             this.n = 0;
+            
+            
         }
 
         public bool Ures
@@ -135,7 +143,7 @@ namespace OE.ALGA.Adatszerkezetek
             get { return n <= 0; }
         }
 
-        public int Elemszam => throw new NotImplementedException();
+        
 
         public T Elso()
         {
@@ -233,7 +241,12 @@ namespace OE.ALGA.Adatszerkezetek
         {
             if (n >= E.Length)
             {
-                throw new NincsHelyKivetel();
+                T[] ideiglenes = new T[E.Length * 2];
+                for (int i = 0; i < E.Length; i++)
+                {
+                    ideiglenes[i] = E[i];
+                }
+                E = ideiglenes;
             }
             E[n] = ertek;
             n++;
@@ -247,7 +260,12 @@ namespace OE.ALGA.Adatszerkezetek
             }
             if (n >= E.Length)
             {
-                throw new NincsHelyKivetel();
+                T[] ideiglenes  = new T[E.Length * 2];
+                for (int i = 0; i < E.Length; i++)
+                {
+                    ideiglenes[i] = E[i];
+                }
+                E = ideiglenes;
             }
             for (int i = n; i > index; i--)
             {
@@ -290,6 +308,19 @@ namespace OE.ALGA.Adatszerkezetek
             }
 
 
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < n; i++)
+            {
+                yield return E[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
