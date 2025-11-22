@@ -104,6 +104,12 @@ namespace OE.ALGA.Adatszerkezetek
             {
                 throw new NincsHelyKivetel();
             }
+            if (n == 0)
+            {
+                E[u] = ertek;
+                n++;
+                return;
+            }
             n++;
             if (u == E.Length-1)
             {
