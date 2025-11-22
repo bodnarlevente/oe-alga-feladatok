@@ -95,7 +95,7 @@ namespace OE.ALGA.Adatszerkezetek
             {
                 throw new NincsElemKivetel();
             }
-            return E[(e % E.Length) + 1];
+            return E[(e % E.Length) ];
         }
 
         public void Sorba(T ertek)
@@ -105,8 +105,16 @@ namespace OE.ALGA.Adatszerkezetek
                 throw new NincsHelyKivetel();
             }
             n++;
-            u = (u % E.Length) ;
+            if (u == E.Length)
+            {
+                u= 0;
+            }
+            else
+            {
+                u++;
+            }
             E[u] = ertek;
+            
         }
 
         public T Sorbol()
@@ -117,8 +125,17 @@ namespace OE.ALGA.Adatszerkezetek
             }
 
             n--;
-            e = (e % E.Length) + 1;
-            return E[e];
+            T ertek =E[e];
+            if (e == E.Length -1)
+            {
+                e = 0;
+            }
+            else
+            {
+                e++;
+            }
+            return ertek;
+            
         }
     }
     public class TombLista<T> : Lista<T>, IEnumerable<T>
