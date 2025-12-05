@@ -23,7 +23,7 @@ namespace OE.ALGA.Adatszerkezetek
             EllenorizCsucsIndex(forras);
             EllenorizCsucsIndex(cel);
             szomszedsagiMatrix[forras, cel] = true;
-            szomszedsagiMatrix[cel, forras] = true; // Mivel irányítatlan graf
+            szomszedsagiMatrix[cel, forras] = true; 
         }
 
         public bool ElerhetoE(int forras, int cel)
