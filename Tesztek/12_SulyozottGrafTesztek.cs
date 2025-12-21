@@ -165,7 +165,7 @@ namespace OE.ALGA.Tesztek.Adatszerkezetek
             csg.UjEl(0, 1, 10.0f);
             csg.UjEl(0, 2, 20.0f);
             csg.UjEl(1, 2, 5.0f);
-            Halmaz<SulyozottEgeszGrafEl> elek = FeszitofaKereses.Kruskal(csg,0);
+            Halmaz<SulyozottEgeszGrafEl> elek = FeszitofaKereses.Kruskal(csg);
             Assert.Multiple(() =>
             {
                 Assert.That(elek.Eleme(new SulyozottEgeszGrafEl(0, 1, 10.0f)), Is.True);
@@ -197,7 +197,7 @@ namespace OE.ALGA.Tesztek.Adatszerkezetek
             csg.UjEl(4, 2, 4.0f);
             csg.UjEl(4, 3, 1.0f);
 
-            Halmaz<SulyozottEgeszGrafEl> elek = FeszitofaKereses.Kruskal(csg,0);
+            Halmaz<SulyozottEgeszGrafEl> elek = FeszitofaKereses.Kruskal(csg);
             float sum = 0.0f;
             elek.Bejar(x =>
             {

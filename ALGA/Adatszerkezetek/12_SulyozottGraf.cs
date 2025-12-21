@@ -234,10 +234,12 @@ namespace OE.ALGA.Adatszerkezetek
             return pi;
         }
 
-        public static Halmaz<E> Kruskal<V, E>(SulyozottGraf<V, E> g, V start)
+        public static Halmaz<E> Kruskal<V, E>(SulyozottGraf<V, E> g)
             where E : SulyozottGrafEl<V>, IComparable<E>
             where V : IComparable<V>
         {
+
+            
             FaHalmaz<E> A = new FaHalmaz<E>();
             HasitoSzotarTulcsordulasiTerulettel<V, V> szulo = new HasitoSzotarTulcsordulasiTerulettel<V, V>(g.ElekSzama);
 
