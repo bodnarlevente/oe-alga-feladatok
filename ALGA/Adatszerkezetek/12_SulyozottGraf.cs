@@ -111,7 +111,7 @@ namespace OE.ALGA.Adatszerkezetek
         {
             if (float.IsNaN(M[honnan, hova]))
             {
-                throw new NincsElemKivetel();
+                throw new NincsElKivetel();
             }
             return M[honnan, hova];
         }
@@ -133,16 +133,16 @@ namespace OE.ALGA.Adatszerkezetek
 
     public class Utkereses
     {
-        public static Szotar<V, double> Dijkstra<V, E>(SulyozottGraf<V, E> g, V start)
+        public static Szotar<V, float> Dijkstra<V, E>(SulyozottGraf<V, E> g, V start)
             where E : SulyozottGrafEl<V>
             where V : IComparable<V>
         {
-            HasitoSzotarTulcsordulasiTerulettel<V, double> d = new HasitoSzotarTulcsordulasiTerulettel<V, double>(g.ElekSzama);
+            HasitoSzotarTulcsordulasiTerulettel<V, float> d = new HasitoSzotarTulcsordulasiTerulettel<V, float>(g.ElekSzama);
             V[] csucsokTomb = g.Csucsok.Tombbe();
 
             for (int i = 0; i < csucsokTomb.Length; i++)
             {
-                d.Beir(csucsokTomb[i], double.PositiveInfinity);
+                d.Beir(csucsokTomb[i], float.PositiveInfinity);
             }
             d.Beir(start, 0);
 
@@ -164,7 +164,7 @@ namespace OE.ALGA.Adatszerkezetek
                 for (int i = 0; i < szomszedok.Length; i++)
                 {
                     V v = szomszedok[i];
-                    double tavolsag = d.Kiolvas(u) + g.Suly(u, v);
+                    float tavolsag = d.Kiolvas(u) + g.Suly(u, v);
                     if (tavolsag < d.Kiolvas(v))
                     {
                         d.Beir(v, tavolsag);
