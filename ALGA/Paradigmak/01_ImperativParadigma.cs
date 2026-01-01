@@ -111,7 +111,7 @@ namespace OE.ALGA.Paradigmak
 
         public void Dispose()
         {
-            // Nincs szükség erőforrások felszabadítására
+            
         }
 
         public bool MoveNext()

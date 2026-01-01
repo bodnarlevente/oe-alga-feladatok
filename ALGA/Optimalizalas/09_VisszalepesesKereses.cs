@@ -25,6 +25,7 @@ namespace OE.ALGA.Optimalizalas
             this.ft = ft;
             this.fk = fk;
             this.josag = josag;
+            optMegoldas = new T[0];
         }
 
         public T[] OptimalisMegoldas()
@@ -255,7 +256,7 @@ namespace OE.ALGA.Optimalizalas
                     }
                 }
 
-                // 3. Becslés: Maradék hely * Legjobb arány
+               
                 return freeCapacity * maxRatio;
             };
 

@@ -4,43 +4,44 @@ namespace OE.ALGA.Optimalizalas
 {
     public class HatizsakProblema
     {
-        public int n { get; }
-        public int Wmax { get; }
-        public int[] w { get; }
-        public float[] p { get; }
+        public int n { get; private set; }
+        public int Wmax { get; private set; }
+        public int[] w { get; private set; }
+        public float[] p { get; private set; }
 
-        public HatizsakProblema(int n, int Wmax, int[] w, float[] p)
+        public HatizsakProblema(int n, int wmax, int[] w, float[] p)
         {
             this.n = n;
-            this.Wmax = Wmax;
-            this.w = w;
-            this.p = p;
+            this.Wmax = wmax;
+            // Biztonságos másolat
+            this.w = (int[])w.Clone();
+            this.p = (float[])p.Clone();
         }
 
         public int OsszSuly(bool[] pakolas)
         {
-            int osszSuly = 0;
+            int suly = 0;
             for (int i = 0; i < n; i++)
             {
                 if (pakolas[i])
                 {
-                    osszSuly += w[i];
+                    suly += w[i];
                 }
             }
-            return osszSuly;
+            return suly;
         }
 
         public float OsszErtek(bool[] pakolas)
         {
-            float osszErtek = 0;
+            float ertek = 0;
             for (int i = 0; i < n; i++)
             {
                 if (pakolas[i])
                 {
-                    osszErtek += p[i];
+                    ertek += p[i];
                 }
             }
-            return osszErtek;
+            return ertek;
         }
 
         public bool Ervenyes(bool[] pakolas)
@@ -53,11 +54,11 @@ namespace OE.ALGA.Optimalizalas
     {
         private int m;
         private Func<int, T> generator;
-        private Func<T, double> josag;
+        private Func<T, float> josag;
 
         public int LepesSzam { get; private set; }
 
-        public NyersEro(int m, Func<int, T> generator, Func<T, double> josag)
+        public NyersEro(int m, Func<int, T> generator, Func<T, float> josag)
         {
             this.m = m;
             this.generator = generator;
@@ -67,93 +68,97 @@ namespace OE.ALGA.Optimalizalas
 
         public T OptimalisMegoldas()
         {
-            LepesSzam = 0;
+            // JAVÍTÁS: Ha nincs megoldástér (m=0), akkor default értéket adunk vissza,
+            // nem próbáljuk meg generálni az 1. elemet.
             if (m <= 0)
             {
-                return default(T);
+                LepesSzam = 0;
+                return default(T); // int esetén ez 0, amit a teszt vár
             }
 
-            T optimalis = generator(1);
-            double maxErtek = josag(optimalis);
+            // 1. Kezdőérték: az első megoldás (1-től indexelve a feladat szerint)
+            T legjobbMegoldas = generator(1);
+            float legjobbErtek = josag(legjobbMegoldas);
 
+            LepesSzam = 0;
+
+            // 2. Végigiterálunk a maradék lehetőségen (2-től m-ig)
             for (int i = 2; i <= m; i++)
             {
-                T aktualis = generator(i);
-                double aktualisErtek = josag(aktualis);
+                T aktualisJelolt = generator(i);
+                float aktualisErtek = josag(aktualisJelolt);
 
-                LepesSzam++;
-                if (aktualisErtek > maxErtek)
+                LepesSzam++; // Minden összehasonlításnál növeljük
+
+                if (aktualisErtek > legjobbErtek)
                 {
-                    maxErtek = aktualisErtek;
-                    optimalis = aktualis;
+                    legjobbErtek = aktualisErtek;
+                    legjobbMegoldas = aktualisJelolt;
                 }
             }
 
-            return optimalis;
+            return legjobbMegoldas;
         }
     }
 
     public class NyersEroHatizsakPakolas
     {
-        private HatizsakProblema problama;
-        private bool[] optimalisPakolas;
+        private HatizsakProblema problema;
 
         public int LepesSzam { get; private set; }
 
-        public NyersEroHatizsakPakolas(HatizsakProblema problama)
+        private bool[] _cachedResult;
+
+        public NyersEroHatizsakPakolas(HatizsakProblema problema)
         {
-            this.problama = problama;
+            this.problema = problema;
             this.LepesSzam = 0;
-            this.optimalisPakolas = null;
         }
 
         public bool[] Generator(int i)
         {
-            bool[] pakolas = new bool[problama.n];
-            int index = i - 1;
+            // i bitjei reprezentálják a kiválasztást
+            bool[] pakolas = new bool[problema.n];
 
-            for (int j = 0; j < problama.n; j++)
+            for (int bitIndex = 0; bitIndex < problema.n; bitIndex++)
             {
-                pakolas[j] = (index % 2) == 1;
-                index /= 2;
+                // Jobbra toljuk és megnézzük az utolsó bitet
+                pakolas[bitIndex] = ((i >> bitIndex) & 1) == 1;
             }
             return pakolas;
         }
 
-        public double Josag(bool[] pakolas)
+        public float Josag(bool[] pakolas)
         {
-            if (!problama.Ervenyes(pakolas))
+            if (problema.Ervenyes(pakolas))
             {
-                return -1;
+                return problema.OsszErtek(pakolas);
             }
-            return problama.OsszErtek(pakolas);
+            return -1f;
         }
 
         public bool[] OptimalisMegoldas()
         {
-            int m = (int)Math.Pow(2, problama.n);
+            // Lehetséges megoldások száma: 2^n
+            // (Ha n=0, akkor m=1, tehát az üres hátizsáknál is lefut a ciklus egyszer,
+            // ami helyes, mert az üres halmaz is egy megoldás).
+            int m = 1 << problema.n;
 
-            NyersEro<bool[]> megoldasKereso = new NyersEro<bool[]>(m, Generator, Josag);
+            var nyersEroAlgoritmus = new NyersEro<bool[]>(m, Generator, Josag);
 
-            this.optimalisPakolas = megoldasKereso.OptimalisMegoldas();
-            this.LepesSzam = megoldasKereso.LepesSzam;
+            _cachedResult = nyersEroAlgoritmus.OptimalisMegoldas();
+            LepesSzam = nyersEroAlgoritmus.LepesSzam;
 
-            return this.optimalisPakolas;
+            return _cachedResult;
         }
 
-        public double OptimalisErtek()
+        public float OptimalisErtek()
         {
-            if (this.optimalisPakolas == null)
+            if (_cachedResult == null)
             {
-                this.OptimalisMegoldas();
+                OptimalisMegoldas();
             }
-
-            if (this.optimalisPakolas == null)
-            {
-                return -1;
-            }
-
-            return Josag(this.optimalisPakolas);
+            return problema.OsszErtek(_cachedResult);
         }
     }
 }
