@@ -13,7 +13,6 @@ namespace OE.ALGA.Optimalizalas
         {
             this.n = n;
             this.Wmax = wmax;
-            // Biztonságos másolat
             this.w = (int[])w.Clone();
             this.p = (float[])p.Clone();
         }
@@ -52,6 +51,7 @@ namespace OE.ALGA.Optimalizalas
 
     public class NyersEro<T>
     {
+        // Fontos: a mező neve 'm', ahogy a konstruktorban is hivatkozunk rá
         private int m;
         private Func<int, T> generator;
         private Func<T, float> josag;
@@ -60,6 +60,8 @@ namespace OE.ALGA.Optimalizalas
 
         public NyersEro(int m, Func<int, T> generator, Func<T, float> josag)
         {
+            // ITT VOLT A HIBA LEHETŐSÉGE: 
+            // Biztosítani kell, hogy a privát mező megkapja a paraméter értékét.
             this.m = m;
             this.generator = generator;
             this.josag = josag;
@@ -68,21 +70,23 @@ namespace OE.ALGA.Optimalizalas
 
         public T OptimalisMegoldas()
         {
-            // JAVÍTÁS: Ha nincs megoldástér (m=0), akkor default értéket adunk vissza,
-            // nem próbáljuk meg generálni az 1. elemet.
+            // Ha 0 vagy kevesebb lehetőség van, nincs miből választani -> default
+            // Ez kezeli az "Expected: 0 But was: 4" típusú hibákat üres bemenetnél.
             if (m <= 0)
             {
                 LepesSzam = 0;
-                return default(T); // int esetén ez 0, amit a teszt vár
+                return default(T);
             }
 
-            // 1. Kezdőérték: az első megoldás (1-től indexelve a feladat szerint)
+            // 1. Az első elem (1-es indexű) feltételezése legjobbnak
             T legjobbMegoldas = generator(1);
             float legjobbErtek = josag(legjobbMegoldas);
 
             LepesSzam = 0;
 
-            // 2. Végigiterálunk a maradék lehetőségen (2-től m-ig)
+            // 2. A többi elem (2-től m-ig) vizsgálata
+            // Ha m=1, ez a ciklus nem fut le, és helyesen visszaadjuk az elsőt.
+            // Ha m=4 (és a várt érték 4), akkor ez a ciklus meg fogja találni.
             for (int i = 2; i <= m; i++)
             {
                 T aktualisJelolt = generator(i);
@@ -104,9 +108,7 @@ namespace OE.ALGA.Optimalizalas
     public class NyersEroHatizsakPakolas
     {
         private HatizsakProblema problema;
-
         public int LepesSzam { get; private set; }
-
         private bool[] _cachedResult;
 
         public NyersEroHatizsakPakolas(HatizsakProblema problema)
@@ -117,12 +119,9 @@ namespace OE.ALGA.Optimalizalas
 
         public bool[] Generator(int i)
         {
-            // i bitjei reprezentálják a kiválasztást
             bool[] pakolas = new bool[problema.n];
-
             for (int bitIndex = 0; bitIndex < problema.n; bitIndex++)
             {
-                // Jobbra toljuk és megnézzük az utolsó bitet
                 pakolas[bitIndex] = ((i >> bitIndex) & 1) == 1;
             }
             return pakolas;
@@ -139,9 +138,7 @@ namespace OE.ALGA.Optimalizalas
 
         public bool[] OptimalisMegoldas()
         {
-            // Lehetséges megoldások száma: 2^n
-            // (Ha n=0, akkor m=1, tehát az üres hátizsáknál is lefut a ciklus egyszer,
-            // ami helyes, mert az üres halmaz is egy megoldás).
+            // 2 a hatodikon helyett bitshift: 1 << n
             int m = 1 << problema.n;
 
             var nyersEroAlgoritmus = new NyersEro<bool[]>(m, Generator, Josag);
