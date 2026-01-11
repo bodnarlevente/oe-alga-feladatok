@@ -107,7 +107,7 @@ namespace OE.ALGA.Paradigmak
         }
 
 
-        object System.Collections.IEnumerator.Current => Current ?? throw new NincsElemKivetel();
+        object System.Collections.IEnumerator.Current => Current;
 
         public void Dispose()
         {
